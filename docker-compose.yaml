@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  todo-api:
+    build: ./api
+    volumes:
+      - ./api:/home/node/app
+      - /home/node/app/node_modules
+    ports:
+      - 3000:3000
+      - 9229:9229
+    command: npm run start:dev
+
+      
+  
