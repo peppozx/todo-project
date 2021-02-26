@@ -10,6 +10,15 @@ services:
       - 3000:3000
       - 9229:9229
     command: npm run start:dev
+  todo-frontend:
+    build: ./todo-frontend
+    volumes:
+      - ./todo-frontend:/home/node/app
+      - /home/node/app/node_modules
+    ports:
+      - 8080:8080
+    command: npm run start
+
 
       
   
