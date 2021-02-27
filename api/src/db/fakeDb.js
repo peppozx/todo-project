@@ -14,6 +14,10 @@ class FakeDb {
         });
         return this.users;
     }
+
+    findUser(username) {
+        return this.users.filter(u => u.username === username);
+    }
 }
 
 module.exports = new FakeDb();

@@ -42,10 +42,7 @@ function setupComponents({ prefix, endpoints }) {
                 body: req.body,
                 query: req.query,
                 params: req.params,
-                user: {
-                    tracked_suppliers: res.locals.tracked_suppliers,
-                    platform: req.header('Lett-Platform'),
-                },
+                user: req.user,
             });
             res.status(response.statusCode).send(response.body);
         });

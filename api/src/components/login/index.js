@@ -1,4 +1,4 @@
-const { ok } = require('../../shared/apiResponse/apiResponse');
+const loginController = require('./controller');
 
 module.exports = {
     prefix: '/login',
@@ -6,9 +6,7 @@ module.exports = {
         {
             path: '/',
             method: 'post',
-            callback: ({ body }) => {
-                return ok(body);
-            },
+            callback: loginController.execute.bind(loginController),
             middlewares: [],
             schema: {
                 username: {

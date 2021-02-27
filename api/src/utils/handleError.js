@@ -4,8 +4,10 @@ const {
     notFound, 
     forbidden, 
     badRequest, 
-    internalServerError
+    internalServerError,
+    unauthorized
 } = require('../shared/apiResponse/apiResponse');
+const APP_ERROR_TYPE = require('../shared/AppError/APP_ERROR_TYPE');
 
 function handleError(error) {
     if (error.type === APP_ERROR_TYPE.VALIDATION) {
@@ -30,6 +32,11 @@ function handleError(error) {
         });
     } else if (error.type === APP_ERROR_TYPE.BAD_REQUEST) {
         return badRequest({
+            message: error.message,
+            details: error.details,
+        });
+    }else if (error.type === APP_ERROR_TYPE.UNAUTHORIZED) {
+        return unauthorized({
             message: error.message,
             details: error.details,
         });

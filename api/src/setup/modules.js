@@ -9,7 +9,7 @@ const { setupComponents } = require('../setup/api/setupComponents');
 
 const router = express.Router();
 
-const components = [user];
+const components = [login, user];
 
 components.forEach(component => {
     router.use(setupComponents(component));
