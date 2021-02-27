@@ -5,27 +5,25 @@
         <span>{{ project.name }} </span>
       </div>
       <div class="edit">
-          <i class="edit fa fa-edit" style="font-size: 18px"></i>
-          <i class="delete fa fa-trash"></i>
+        <i class="edit fa fa-edit" style="font-size: 18px"></i>
+        <i class="delete fa fa-trash" @click="deleteProject"></i>
       </div>
     </div>
     <div class="project-tasks">
       <div class="tasks" v-for="task of this.project.tasks" :key="task.id">
-        <div class="todo" v-if="!task.finished">
-          <input type="checkbox" @click="closeTask(task.id)" />
-          <label for="vehicle1">{{ task.name }}</label
+        <div class="todo">
+          <input :disabled="task.finished" type="checkbox" @click="closeTask(task.id)" />
+          <label :class="{ 'task-finished': task.finished }" for="vehicle1">{{ task.name }}</label
           ><br />
           <div class="edit-mode">
             <i
+              v-if="!task.finished"
               class="edit fa fa-edit"
               style="font-size: 18px"
               @click="editTask(task.id)"
             ></i>
-            <i class="delete fa fa-trash" @click="deleteTask(task.id)"></i>
+            <i v-if="!task.finished" class="delete fa fa-trash" @click="deleteTask(task.id)"></i>
           </div>
-        </div>
-        <div class="done" v-if="task.finished">
-          {{ task.name }}
         </div>
       </div>
     </div>
@@ -47,6 +45,20 @@ export default {
     };
   },
   methods: {
+    async deleteProject() {
+      try {
+        await fetch(`http://localhost:3000/project/${this.project.id}`, {
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token"),
+          },
+        });
+        this.$store.dispatch("loadProjects");
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async createTask() {
       try {
         await fetch(`http://localhost:3000/project/${this.project.id}/task`, {
@@ -170,6 +182,8 @@ export default {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
+  transition: .6s;
+  animation: transitionOpacity 1s;
 }
 
 .todo input {
@@ -188,11 +202,11 @@ export default {
 }
 
 .edit {
-    flex: 0 0 20%;
-    cursor: pointer;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
+  flex: 0 0 20%;
+  cursor: pointer;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
 }
 
 .todo .delete {
@@ -215,4 +229,59 @@ export default {
   justify-content: space-around;
   padding: 20px 0px 25px 0px;
 }
+
+.create-task input {
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 1px;
+    background-color: transparent;
+}
+
+.create-task button {
+    background-color: #8ebf42;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 600;
+    font-family: Montserrat;
+    border-width: 0px;
+    width: 60px;
+    cursor: pointer;
+    transition: .6s;
+}
+
+.create-task button:hover {
+    transition: .6s;
+    transform: scale(1.05);
+}
+
+.task-finished {
+    text-decoration: line-through;
+}
+
+.project-tasks::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px #8ebf42;
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+
+.project-tasks::-webkit-scrollbar
+{
+  width: 6px;
+  background-color: #F5F5F5;
+}
+
+.project-tasks::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px #8ebf42;
+  background-color: #8ebf42;
+}
+
+@keyframes transitionOpacity {
+    from { opacity: 0 }
+    to { opacity: 1};
+}
+
 </style>
