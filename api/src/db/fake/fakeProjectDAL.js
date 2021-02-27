@@ -1,22 +1,21 @@
 class FakeProjectDAL {
-    constructor() {
-        this.users = [];
-        this.projects = [];
+    constructor(db) {
+        this.db = db;
         this.counter = 0;
     }
 
     async createProject(projectDTO) {
-        this.projects.push(projectDTO);
+        this.db.projects.push(projectDTO);
         return this.projects;
     }
 
     async deleteProject(id) {
-        this.projects = this.projects.filter(p => p.id != id);
+        this.db.projects = this.projects.filter(p => p.id != id);
         return this.projects;
     }
 
     async getProject(id) {
-        const [project] = this.projects.filter(p => p.id === id);
+        const [project] = this.db.projects.filter(p => p.id === id);
         return project;
     }
 
@@ -27,8 +26,8 @@ class FakeProjectDAL {
     }
 
     async getProjects() {
-        return this.projects;
+        return this.db.projects;
     }
 }
 
-module.exports = new FakeProjectDAL();
+module.exports = FakeProjectDAL;

@@ -1,12 +1,12 @@
 class FakeUserDAL {
-    constructor() {
-        this.users = [];
+    constructor(db) {
+        this.db = db;
         this.counter = 0;
     }
 
     async createUser(userDTO) {
         const { username, password } = userDTO;
-        this.users.push({
+        this.db.users.push({
             id: this.counter++,
             username,
             password
@@ -15,9 +15,9 @@ class FakeUserDAL {
     }
 
     async findUser(username) {
-        return this.users.filter(u => u.username === username);
+        return this.db.users.filter(u => u.username === username);
     }
 
 }
 
-module.exports = new FakeUserDAL();
+module.exports = FakeUserDAL;

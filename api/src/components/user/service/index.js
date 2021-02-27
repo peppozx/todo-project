@@ -1,5 +1,5 @@
 const UserService = require('./user');
-const fakeUserDAL = require('../../../db/fake/fakeUserDAL');
+const { fakeUserDAL } = require('../../../db/fake');
 
 const userService = new UserService(fakeUserDAL);
 
