@@ -1,7 +1,6 @@
 class FakeProjectDAL {
     constructor(db) {
         this.db = db;
-        this.counter = 0;
     }
 
     async createProject(projectDTO) {
