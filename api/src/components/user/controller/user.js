@@ -1,4 +1,3 @@
-const { users } = require('../../../db/fakeDb');
 class UserController {
     constructor(userService, apiResponse, handleError) {
         this.userService = userService;

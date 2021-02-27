@@ -27,6 +27,11 @@ class FakeProjectDAL {
     async getProjects() {
         return this.db.projects;
     }
+
+    async getTasks(projectId) {
+        const tasks = this.db.tasks.filter(t => t.projectId === projectId);
+        return tasks;
+    }
 }
 
 module.exports = FakeProjectDAL;

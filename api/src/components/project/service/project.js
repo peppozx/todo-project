@@ -60,8 +60,13 @@ class ProjectService {
     }
 
     async getProjects(user) {
-        const projects = await this.projectDAL.getProjects();
-        return projects.filter(p => p.username === user.username);
+        const allProjects = await this.projectDAL.getProjects();
+        const projects =  allProjects.filter(p => p.username === user.username);
+        for (let i = 0 ; i < projects.length ; i++) {
+            const tasks = await this.projectDAL.getTasks(projects[i].id);
+            projects[i].tasks = tasks;
+        }
+        return projects;
     }
 
     async getProject(user, id) {

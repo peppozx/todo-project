@@ -88,7 +88,7 @@ export default {
 .login-page-form-title {
   margin-top: 10px;
   flex: 0 0 100%;
-  font-size: 25px;
+  font-size: 16px;
 }
 
 .loading {
