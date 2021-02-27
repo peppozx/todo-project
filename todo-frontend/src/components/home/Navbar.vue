@@ -44,7 +44,7 @@ export default {
   background-color: snow;
   border: solid;
   border-width: 0px 0px 1px 0px;
-  box-shadow: 1px 1px 10px 2px gray;
+  box-shadow: 1px 1px 10px 2px #8ebf42;
   margin-bottom: 20px;
   align-items: center;
 }
@@ -59,20 +59,28 @@ export default {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
+  flex: 0 0 30%;
 }
 
 .user span {
-    flex: 0 0 100%;
+    flex: 0 0 50%;
 }
 
 .user button {
-    flex: 0 0 100%;
-    background-color: black;
+    flex: 0 0 50%;
+    background-color: #f0554a;
+    font-weight: 600;
     color: #fff;
     border-width: 0px;
     border-radius: 10px;
     height: 30px;
     width: 80px;
     cursor: pointer;
+    transition: .6s;
+}
+
+button:hover {
+  transition: .6s;
+  transform: scale(1.05);
 }
 </style>

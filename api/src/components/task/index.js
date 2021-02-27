@@ -36,7 +36,7 @@ module.exports = {
         },
         {
             path: '/:projectId/task/:id',
-            method: 'patch',
+            method: 'put',
             callback: taskController.updateTask.bind(taskController),
             middlewares: [authenticate],
         }

@@ -34,36 +34,35 @@ import PulseLoader from "vue-spinner/src/PulseLoader";
 export default {
   name: "CreateProject",
   data() {
-      return {
-          name: '',
-          loading: false,
-      }
+    return {
+      name: "",
+      loading: false,
+    };
   },
   components: {
-      PulseLoader,
+    PulseLoader,
   },
   methods: {
-      async createProject() {
-          try {
-              this.loading = true;
-              await fetch('http://localhost:3000/project', {
-                    method: "POST",
-                    headers: { 
-                        "Content-Type": "application/json",
-                        "Authorization": localStorage.getItem('token'), 
-                    },
-                    body: JSON.stringify({ name: this.name }),
-              });
-            setTimeout(async () => {
-                this.loading = false;
-                this.$store.dispatch('loadProjects');
-            }, 1500);
-              
-          } catch (err) {
-              console.log(err);
-          }
+    async createProject() {
+      try {
+        this.loading = true;
+        await fetch("http://localhost:3000/project", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token"),
+          },
+          body: JSON.stringify({ name: this.name }),
+        });
+        setTimeout(async () => {
+          this.loading = false;
+          this.$store.dispatch("loadProjects");
+        }, 1500);
+      } catch (err) {
+        console.log(err);
       }
-  }
+    },
+  },
 };
 </script>
 
@@ -76,10 +75,11 @@ export default {
 .login-page {
   flex: 0 0 50%;
   font-family: Montserrat;
+  border-radius: 20px;
+  box-shadow: 0px 10px 30px -10px #8ebf42;
 }
 
 .login-page-form {
-  border: 5px solid #f1f1f1;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -121,6 +121,9 @@ export default {
 
 input[type="text"],
 input[type="password"] {
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
   width: 100%;
   padding: 10px 5px;
   margin: 8px 0;
