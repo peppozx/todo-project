@@ -1,12 +1,20 @@
 <template>
     <div>
-        this is the contentttttttt
+        <CreateProject/>
+        <ProjectsWrapper/>
     </div>
 </template>
 
 <script>
+import CreateProject from './CreateProject';
+import ProjectsWrapper from './ProjectsWrapper';
+
 export default {
-    name: 'Content'    
+    name: 'Content',
+    components: {
+        CreateProject,
+        ProjectsWrapper,
+    }  
 }
 </script>
 

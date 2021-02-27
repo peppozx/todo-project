@@ -65,7 +65,7 @@ export default {
         this.userNotFound = false;
         this.incorrectPassword = false;
 
-        const response = await fetch("http://localhost:3000/signin", {
+        let response = await fetch("http://localhost:3000/signin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -74,11 +74,14 @@ export default {
           }),
         });
 
-        const self = this;
-        setTimeout(() => {
+        setTimeout(async () => {
           this.loading = false;
           if (response.status == 200) {
-            self.$router.push('/home');
+            const { token } = await response.json();
+            this.$store.commit('name', this.username);
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', this.username);
+            this.$router.push('/home');
           } else if (response.status == 404) {
             this.userNotFound = true;
           } else if (response.status == 401) {

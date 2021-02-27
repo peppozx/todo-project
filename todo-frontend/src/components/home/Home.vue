@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="wrapper">
         <Navbar/>
         <Content/>    
     </div>
@@ -14,10 +14,19 @@ export default {
     components: {
         Navbar,
         Content,
-    }    
+    },
+    beforeCreate() {
+        if (!localStorage.getItem('token')) {
+            this.$router.push('/signin');
+        }
+    },
+    methods: {
+    }
 }
 </script>
 
 <style scoped>
-
+.wrapper {
+    flex: 0 0 100%;
+}
 </style>
