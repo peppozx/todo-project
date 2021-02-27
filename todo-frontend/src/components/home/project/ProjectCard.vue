@@ -2,19 +2,36 @@
   <div class="card">
     <div class="project-header">
       <div class="name">
-        <span>{{ project.name }} </span>
+        <input
+          ref="projectNameInput.focus();"
+          @keypress="editProjectName"
+          :disabled="!projectEditMode"
+          v-model="project.name"
+          :class="{ 'edit-mode': projectEditMode }"
+        />
       </div>
       <div class="edit">
-        <i class="edit fa fa-edit" style="font-size: 18px"></i>
+        <i
+          @click="activateEditMode"
+          class="edit fa fa-edit"
+          style="font-size: 18px"
+        ></i>
         <i class="delete fa fa-trash" @click="deleteProject"></i>
       </div>
     </div>
     <div class="project-tasks">
       <div class="tasks" v-for="task of this.project.tasks" :key="task.id">
         <div class="todo">
-          <input :disabled="task.finished" type="checkbox" @click="closeTask(task.id)" />
-          <label :class="{ 'task-finished': task.finished }" for="vehicle1">{{ task.name }}</label
-          ><br />
+          <input
+            :disabled="task.finished"
+            type="checkbox"
+            @click="closeTask(task.id)"
+          />
+          <div class="tooltip" :class="{ 'task-finished': task.finished }">
+            <span>{{ task.name }}</span>
+            <span v-if="task.finished" class="tooltiptext">Finished {{ task.finished }}</span>
+          </div>
+          <br />
           <div class="edit-mode">
             <i
               v-if="!task.finished"
@@ -22,14 +39,18 @@
               style="font-size: 18px"
               @click="editTask(task.id)"
             ></i>
-            <i v-if="!task.finished" class="delete fa fa-trash" @click="deleteTask(task.id)"></i>
+            <i
+              v-if="!task.finished"
+              class="delete fa fa-trash"
+              @click="deleteTask(task.id)"
+            ></i>
           </div>
         </div>
       </div>
     </div>
     <hr style="width: 90%" />
     <div class="create-task">
-      <input v-model="taskName" />
+      <input v-model="taskName" placeholder="Task name" />
       <button :disabled="!taskName" @click="createTask">Add</button>
     </div>
   </div>
@@ -42,9 +63,29 @@ export default {
   data() {
     return {
       taskName: "",
+      projectEditMode: false,
     };
   },
   methods: {
+    async editProjectName(e) {
+      if (e.keyCode === 13) {
+        try {
+          await fetch(`http://localhost:3000/project/${this.project.id}`, {
+            method: "put",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: localStorage.getItem("token"),
+            },
+            body: JSON.stringify({
+              name: this.project.name,
+            }),
+          });
+          this.projectEditMode = false;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
     async deleteProject() {
       try {
         await fetch(`http://localhost:3000/project/${this.project.id}`, {
@@ -124,6 +165,10 @@ export default {
         console.error(err);
       }
     },
+
+    activateEditMode() {
+      this.projectEditMode = !this.projectEditMode;
+    },
   },
 };
 </script>
@@ -139,6 +184,8 @@ export default {
   flex: 0 0 90%;
   margin-top: 30px;
   border-radius: 15px;
+  transition: 0.7s;
+  animation: transitionOpacity 0.7s;
 }
 .project-header {
   border-top-right-radius: 15px;
@@ -167,7 +214,7 @@ export default {
 .tasks {
   flex: 0 0 100%;
   text-align: start;
-  padding: 10px 0px 5px 5px;
+  padding: 10px 0px 0px 0px;
 }
 
 .done {
@@ -182,12 +229,13 @@ export default {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  transition: .6s;
+  justify-content: space-between;
+  transition: 0.6s;
   animation: transitionOpacity 1s;
 }
 
 .todo input {
-  flex: 0 0 10%;
+  flex: 0 0 7%;
 }
 
 .todo label {
@@ -231,57 +279,121 @@ export default {
 }
 
 .create-task input {
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-    border-bottom-width: 1px;
-    background-color: transparent;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 1px;
+  background-color: transparent;
 }
 
 .create-task button {
-    background-color: #8ebf42;
-    border-radius: 5px;
-    color: #fff;
-    font-weight: 600;
-    font-family: Montserrat;
-    border-width: 0px;
-    width: 60px;
-    cursor: pointer;
-    transition: .6s;
+  background-color: #8ebf42;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 600;
+  font-family: Montserrat;
+  border-width: 0px;
+  width: 60px;
+  cursor: pointer;
+  transition: 0.6s;
 }
 
 .create-task button:hover {
-    transition: .6s;
-    transform: scale(1.05);
+  transition: 0.6s;
+  transform: scale(1.05);
 }
 
 .task-finished {
-    text-decoration: line-through;
+  text-decoration: line-through;
 }
 
-.project-tasks::-webkit-scrollbar-track
-{
+.project-tasks::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px #8ebf42;
   border-radius: 10px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
-.project-tasks::-webkit-scrollbar
-{
+.project-tasks::-webkit-scrollbar {
   width: 6px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
-.project-tasks::-webkit-scrollbar-thumb
-{
+.project-tasks::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px #8ebf42;
   background-color: #8ebf42;
 }
 
-@keyframes transitionOpacity {
-    from { opacity: 0 }
-    to { opacity: 1};
+.name input {
+  background-color: transparent;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-color: #fff;
+  color: #fff;
+  font-family: Montserrat;
+  font-weight: 500;
 }
 
+input:focus {
+  outline: none;
+}
+
+.edit-mode {
+  border-bottom-width: 1px !important;
+  flex: 0 0 20%;
+}
+
+.tooltip {
+  flex: 0 0 60%;
+  position: relative;
+  display: inline-block;
+  font-size: 13px;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 999999999999999;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  font-size: 10px;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+  z-index: 999999999999
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+  z-index: 999999999
+}
+
+@keyframes transitionOpacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 </style>

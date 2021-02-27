@@ -56,6 +56,7 @@ export default {
         });
         setTimeout(async () => {
           this.loading = false;
+          this.name = '';
           this.$store.dispatch("loadProjects");
         }, 1500);
       } catch (err) {
@@ -147,6 +148,7 @@ button {
   width: 100%;
   transition: 0.6s;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 h1 {
@@ -175,6 +177,17 @@ button:disabled {
 .signup button {
   flex: 0 0 50%;
   background-color: blue;
+}
+
+.container input {
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 1px;
+}
+
+input:focus {
+  outline: none;
 }
 
 span.psw {

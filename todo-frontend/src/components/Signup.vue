@@ -24,7 +24,7 @@
             v-model="password"
           />
         </div>
-        <button v-if="!loading" @click="signup">Sign Up</button>
+        <button :disabled="!this.username || !this.password" v-if="!loading" @click="signup">Sign Up</button>
         <div v-else class="loading">
           <PulseLoader />
         </div>
@@ -77,10 +77,10 @@ export default {
             this.userAlreadyExists = true;
           } else if (response.status === 200) {
             this.success = true;
-          }
-          setTimeout(() => {
+            setTimeout(() => {
               self.$router.push('/signin');
           }, 1000);
+          }
         }, 3000);
       }
     },
@@ -117,6 +117,10 @@ input[type="password"] {
   border: 1px solid #ccc;
   box-sizing: border-box;
   transition: 0.6s;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 1px;
 }
 
 .user-exists {
@@ -142,6 +146,10 @@ input:hover {
   transition: 0.6s;
 }
 
+input:focus {
+  outline: none;
+}
+
 button {
   background-color: #8ebf42;
   color: white;
@@ -151,6 +159,11 @@ button {
   width: 100%;
   transition: 0.6s;
   border-radius: 20px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: gray;
 }
 
 h1 {

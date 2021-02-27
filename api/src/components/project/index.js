@@ -31,7 +31,7 @@ module.exports = {
         },
         {
             path: '/:id',
-            method: 'patch',
+            method: 'put',
             callback: projectController.updateProject.bind(projectController),
             middlewares: [authenticate],
             schema: {

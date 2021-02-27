@@ -41,7 +41,7 @@ export default {
   justify-content: space-between;
   padding: 20px 20px;
   font-family: Montserrat;
-  background-color: snow;
+  background-color: transparent;
   border: solid;
   border-width: 0px 0px 1px 0px;
   box-shadow: 1px 1px 10px 2px #8ebf42;

@@ -156,11 +156,19 @@ input[type="password"] {
   border: 1px solid #ccc;
   box-sizing: border-box;
   transition: 0.6s;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 1px;
 }
 
 input:hover {
   transform: scale(1.05);
   transition: 0.6s;
+}
+
+input:focus {
+  outline: none;
 }
 
 button {
@@ -172,6 +180,7 @@ button {
   width: 100%;
   transition: 0.6s;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 h1 {
