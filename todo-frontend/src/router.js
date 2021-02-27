@@ -1,11 +1,15 @@
 const { default: VueRouter } = require("vue-router");
 
-import Login from './components/Login.vue';
+import Signin from './components/Signin.vue';
+import Signup from './components/Signup.vue';
 
 const routes = [
     {
-        path: '/signin', component: Login,
+        path: '/signin', component: Signin,
     },
+    {
+        path: '/signup', component: Signup,
+    }
 ]
 
 const router = new VueRouter({
