@@ -74,10 +74,11 @@ export default {
           }),
         });
 
+        const self = this;
         setTimeout(() => {
           this.loading = false;
           if (response.status == 200) {
-            console.log("User sign in successfully");
+            self.$router.push('/home');
           } else if (response.status == 404) {
             this.userNotFound = true;
           } else if (response.status == 401) {

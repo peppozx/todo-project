@@ -2,6 +2,7 @@ const { default: VueRouter } = require("vue-router");
 
 import Signin from './components/Signin.vue';
 import Signup from './components/Signup.vue';
+import Home from './components/home/Home.vue';
 
 const routes = [
     {
@@ -9,6 +10,9 @@ const routes = [
     },
     {
         path: '/signup', component: Signup,
+    },
+    {
+        path: '/home', component: Home,
     }
 ]
 
