@@ -7,7 +7,7 @@ class LoginService {
         this.authService = authService;
     }
     
-    async execute({ username, password }) {
+    async signIn({ username, password }) {
         const [user] = await this.loginDAL.findUser(username);
 
         if (!user) {

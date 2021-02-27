@@ -7,16 +7,17 @@ class ProjectService {
         this.projectDAL = projectDAL;
     }
 
-    async createProject(name) {
+    async createProject(user, name) {
         const projectDTO = {
             id: uuid(),
+            username: user.username,
             name,
         }
         const project = await this.projectDAL.createProject(projectDTO);
         return project;
     }
 
-    async deleteProject(id) {
+    async deleteProject(user, id) {
         const project = await this.projectDAL.getProject(id);
         if (!project) {
             throw new AppError({
@@ -24,30 +25,62 @@ class ProjectService {
                 message: 'There\'s no project with id ' + id,
             });
         }
+
+        if (project.username !== user.username) {
+            throw new AppError({
+                type: APP_ERROR_TYPE.FORBIDDEN,
+                message: 'This project does not belong to user ' + user.username,
+            });
+        }
+
         const deletedProject = await this.projectDAL.deleteProject(id);
         return deletedProject;
     }
 
-    async updateProject(id, name) {
+    async updateProject(user, id, name) {
         const project = await this.projectDAL.getProject(id);
+
         if (!project) {
             throw new AppError({
                 type: APP_ERROR_TYPE.NOT_FOUND,
                 message: 'There\'s no project with id ' + id,
             });
         }
+
+        if (project.username !== user.username) {
+            throw new AppError({
+                type: APP_ERROR_TYPE.FORBIDDEN,
+                message: 'This project does not belong to user ' + user.username,
+            });
+        }
+
         const updatedProject = await this.projectDAL.updateProject(id, name);
         return updatedProject;
 
     }
 
-    async getProjects() {
+    async getProjects(user) {
         const projects = await this.projectDAL.getProjects();
-        return projects;
+        return projects.filter(p => p.username === user.username);
     }
 
-    async getProject(id) {
+    async getProject(user, id) {
         const project = await this.projectDAL.getProject(id);
+
+        if (!project) {
+            throw new AppError({
+                type: APP_ERROR_TYPE.NOT_FOUND,
+                message: 'There\'s no project with id ' + id,
+            });
+        }
+        
+        if (project.username !== user.username) {
+            throw new AppError({
+                type: APP_ERROR_TYPE.FORBIDDEN,
+                message: 'This project does not belong to user ' + user.username,
+            });
+        }
+
         return project;
     }
 

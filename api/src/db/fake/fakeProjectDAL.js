@@ -6,12 +6,12 @@ class FakeProjectDAL {
 
     async createProject(projectDTO) {
         this.db.projects.push(projectDTO);
-        return this.projects;
+        return projectDTO;
     }
 
     async deleteProject(id) {
-        this.db.projects = this.projects.filter(p => p.id != id);
-        return this.projects;
+        this.db.projects = this.db.projects.filter(p => p.id != id);
+        return this.db.projects;
     }
 
     async getProject(id) {

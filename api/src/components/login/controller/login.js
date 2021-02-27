@@ -5,10 +5,10 @@ class LoginController {
         this.handleError = handleError;
     }
 
-    async execute({ body }) {
+    async signIn({ body }) {
         try {
             const { username, password } = body;
-            const token = await this.loginService.execute({ username, password });
+            const token = await this.loginService.signIn({ username, password });
             return this.apiResponse.ok({ token });
         } catch (err) {
             return this.handleError(err);

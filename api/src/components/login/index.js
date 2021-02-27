@@ -1,12 +1,12 @@
 const loginController = require('./controller');
 
 module.exports = {
-    prefix: '/login',
+    prefix: '/signin',
     endpoints: [
         {
             path: '/',
             method: 'post',
-            callback: loginController.execute.bind(loginController),
+            callback: loginController.signIn.bind(loginController),
             middlewares: [],
             schema: {
                 username: {

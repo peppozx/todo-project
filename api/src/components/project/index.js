@@ -1,5 +1,7 @@
 const projectController = require('./controller');
 
+const { authenticate } = require('../../auth');
+
 module.exports = {
     prefix: '/project',
     endpoints: [
@@ -7,7 +9,7 @@ module.exports = {
             path: '/',
             method: 'post',
             callback: projectController.createProject.bind(projectController),
-            middlewares: [],
+            middlewares: [authenticate],
             schema: {
                 name: {
                     type: 'string',
@@ -19,19 +21,19 @@ module.exports = {
             path: '/',
             method: 'get',
             callback: projectController.getProjects.bind(projectController),
-            middlewares: [],
+            middlewares: [authenticate],
         },
         {
             path: '/:id',
             method: 'get',
             callback: projectController.getProject.bind(projectController),
-            middlewares: [],
+            middlewares: [authenticate],
         },
         {
             path: '/:id',
             method: 'patch',
             callback: projectController.updateProject.bind(projectController),
-            middlewares: [],
+            middlewares: [authenticate],
             schema: {
                 name: {
                     type: 'string',
@@ -43,7 +45,7 @@ module.exports = {
             path: '/:id',
             method: 'delete',
             callback: projectController.deleteProject.bind(projectController),
-            middlewares: [],
+            middlewares: [authenticate],
         }
     ]
 }

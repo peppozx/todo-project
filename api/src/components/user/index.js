@@ -2,7 +2,7 @@ const userController = require('./controller');
 const { authenticate } = require('../../auth');
 
 module.exports = {
-    prefix: '/user',
+    prefix: '/signup',
     endpoints: [
         {
             path: '/',

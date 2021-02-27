@@ -1,17 +1,15 @@
 class FakeUserDAL {
     constructor(db) {
         this.db = db;
-        this.counter = 0;
     }
 
     async createUser(userDTO) {
         const { username, password } = userDTO;
         this.db.users.push({
-            id: this.counter++,
             username,
             password
         });
-        return this.users;
+        return this.db.users;
     }
 
     async findUser(username) {
