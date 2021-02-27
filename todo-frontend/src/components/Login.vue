@@ -1,0 +1,136 @@
+<template>
+  <div class="login-page">
+    <div class="login-page-form">
+      <div class="login-page-form-title">
+        <span>Sign In</span>
+      </div>
+      <div class="formcontainer">
+        <hr />
+        <div class="container">
+          <label for="uname">Username</label>
+          <input
+            type="text"
+            placeholder="Enter Username"
+            name="uname"
+            required
+          />
+          <label for="psw">Password</label>
+          <input
+            type="password"
+            placeholder="Enter Password"
+            name="psw"
+            required
+          />
+        </div>
+        <button @click="signin">Sign In</button>
+        <div class="signup">
+          <button>Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+        username: '',
+        password: '',
+    };
+  },
+
+  methods: {
+      signin() {
+          if (this.username && this.password) {
+              this.$route.push()
+          }
+      }
+  },
+};
+</script>
+
+<style scoped>
+.login-page {
+  flex: 0 0 70%;
+  margin-top: 100px;
+  font-family: Montserrat;
+}
+
+.login-page-form {
+  border: 5px solid #f1f1f1;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.login-page-form-title {
+    margin-top: 25px;
+    flex: 0 0 100%;
+    font-size: 25px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px 5px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  transition: .6s;
+}
+
+input:hover {
+    transform: scale(1.05);
+    transition: .6s;
+}
+
+button {
+  background-color: #8ebf42;
+  color: white;
+  padding: 14px 0;
+  margin: 10px 0;
+  border: none;
+  width: 100%;
+  transition: .6s;
+  border-radius: 20px;
+}
+
+
+h1 {
+  text-align: center;
+  font-size: 18;
+}
+button:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+  transition: .6s;
+}
+.formcontainer {
+  text-align: left;
+  margin: 24px 50px 12px;
+}
+.signup {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+.signup button {
+    flex: 0 0 50%;
+    background-color: blue;
+}
+
+span.psw {
+  float: right;
+  padding-top: 0;
+  padding-right: 15px;
+}
+/* Change styles for span on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+    display: block;
+    float: none;
+  }
+}
+</style>
