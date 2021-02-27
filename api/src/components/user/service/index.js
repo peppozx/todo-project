@@ -1,6 +1,6 @@
 const UserService = require('./user');
-const userDAL = require('../DAL');
+const fakeUserDAL = require('../../../db/fake/fakeUserDAL');
 
-const userService = new UserService(userDAL);
+const userService = new UserService(fakeUserDAL);
 
 module.exports = userService;

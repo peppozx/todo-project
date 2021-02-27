@@ -15,12 +15,13 @@ class ProjectDAL {
         return deletedProject;
     }
 
-    async updateProject(name) {
-
+    async updateProject(id, name) {
+        const updatedProject = await this.db.updateProject(id, name);
+        return updatedProject;
     }
 
     async getProjects() {
-
+        return await this.db.getProjects();
     }
 
     async getProject(id) {

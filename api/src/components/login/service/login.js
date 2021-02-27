@@ -8,7 +8,7 @@ class LoginService {
     }
     
     async execute({ username, password }) {
-        const user = await this.loginDAL.findUser(username);
+        const [user] = await this.loginDAL.findUser(username);
 
         if (!user) {
             throw new AppError({

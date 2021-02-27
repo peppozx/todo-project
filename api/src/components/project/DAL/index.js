@@ -1,6 +1,5 @@
 const ProjectDAL = require('./project');
-const fakeDb = require('../../../db/fakeDb');
 
-const projectDAL = new ProjectDAL(fakeDb);
+const projectDAL = new ProjectDAL();
 
 module.exports = projectDAL;

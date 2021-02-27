@@ -28,16 +28,27 @@ class ProjectService {
         return deletedProject;
     }
 
-    async updateProject(name) {
+    async updateProject(id, name) {
+        const project = await this.projectDAL.getProject(id);
+        if (!project) {
+            throw new AppError({
+                type: APP_ERROR_TYPE.NOT_FOUND,
+                message: 'There\'s no project with id ' + id,
+            });
+        }
+        const updatedProject = await this.projectDAL.updateProject(id, name);
+        return updatedProject;
 
     }
 
     async getProjects() {
-
+        const projects = await this.projectDAL.getProjects();
+        return projects;
     }
 
-    async getProject(name) {
-
+    async getProject(id) {
+        const project = await this.projectDAL.getProject(id);
+        return project;
     }
 
 }

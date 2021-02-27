@@ -26,16 +26,6 @@ module.exports = {
             method: 'get',
             callback: projectController.getProject.bind(projectController),
             middlewares: [],
-            schema: {
-                username: {
-                    type: 'string',
-                    required: true,
-                },
-                password: {
-                    type: 'string',
-                    required: true,
-                }
-            }
         },
         {
             path: '/:id',

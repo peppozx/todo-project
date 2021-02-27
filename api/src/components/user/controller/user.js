@@ -12,7 +12,7 @@ class UserController {
             const user = await this.userService.createUser({ username, password });
             return this.apiResponse.ok(user);
         } catch (err) {
-            return handleError(err);
+            return this.handleError(err);
         }   
     }
 }
