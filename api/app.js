@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongo = require('./src/db/mongo/mongo');
+require('dotenv').config();
 
 let app;
 
@@ -14,16 +15,17 @@ async function connectMongo() {
 }
 
 async function start() {
-    await connectMongo();
+    if (process.env.NODE_ENV === 'prod') {
+        await connectMongo();
+    }
+
     app = express();
     app.use(cors());
     app.use(express.json());
 
-    app.get('/teste', (req, res) => {
-        return res.json({ ok: true });
-    });
     const modules = require('./src/setup/modules');
     app.use(modules);
+
     return app;
 }
 

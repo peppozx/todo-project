@@ -15,11 +15,11 @@ services:
     networks:
       - net-todo-app
     hostname: todo-api
-  todo-frontend:
-    build: ./todo-frontend
+  app:
+    build: ./app
     volumes:
-      - ./todo-frontend:/home/node/app
-      - /home/node/app/node_modules
+      - ./app:/home/app
+      - /home/app/node_modules
     ports:
       - 8080:8080
     command: npm run start

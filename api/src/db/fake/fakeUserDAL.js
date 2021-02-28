@@ -9,11 +9,14 @@ class FakeUserDAL {
             username,
             password
         });
-        return this.db.users;
+        return {
+            username,
+        };
     }
 
     async findUser(username) {
-        return this.db.users.filter(u => u.username === username);
+        const [user] = this.db.users.filter(u => u.username === username);
+        return user;
     }
 
 }

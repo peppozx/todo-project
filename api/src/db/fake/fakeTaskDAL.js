@@ -4,7 +4,7 @@ class FakeTasksDAL {
     }
 
     async getProject(id) {
-        const [project] = this.db.projects.filter(p => p.id === id);
+        const project = this.db.projects.filter(p => p.id === id);
         return project;
     }
 
@@ -19,7 +19,7 @@ class FakeTasksDAL {
     }
 
     async getTask(id) {
-        const [task] = this.db.tasks.filter(t => t.id === id);
+        const task = this.db.tasks.filter(t => t.id === id);
         return task;
     }
 

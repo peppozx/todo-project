@@ -10,11 +10,11 @@ class FakeProjectDAL {
 
     async deleteProject(id) {
         this.db.projects = this.db.projects.filter(p => p.id != id);
-        return this.db.projects;
+        return id;
     }
 
     async getProject(id) {
-        const [project] = this.db.projects.filter(p => p.id === id);
+        const project = this.db.projects.filter(p => p.id === id);
         return project;
     }
 

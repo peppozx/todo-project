@@ -45,7 +45,15 @@ class MongoConnect {
     }
 
     getClient() {
-        return this.client;
+        if (process.env.NODE_ENV === 'prod') {
+            return this.client
+        } else {
+            return {
+                collection(name) {
+                    return name;
+                }
+            }
+        }
     }
 }
 
