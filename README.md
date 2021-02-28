@@ -30,16 +30,15 @@
    ```sh
    docker-compose up
    ```
-   ```
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Igor Mattar - mctubegui@gmail.com
+Igor - mctubegui@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/peppozx/todo-project)
+Project Link: [https://github.com/peppozx/todo-project]
 
 
 
