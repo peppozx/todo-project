@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import router from '../router';
+import endSession from '../services/logout';
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -39,7 +42,7 @@ const store = new Vuex.Store({
         creatingProject(state, is) {
             state.creatingProject = is;
         },
-        addTask(state, {projectId, task }) {
+        addTask(state, { projectId, task }) {
             state.projects = state.projects.map(p => {
                 if (p.id === projectId) {
                     p.tasks.push(task);
@@ -59,6 +62,9 @@ const store = new Vuex.Store({
                 },
                 body: JSON.stringify({ name: projectName }),
             });
+
+            if (response.status == 401 || response.status == 400) return endSession(router);
+
             const project = await response.json();
             project.tasks = [];
 
@@ -67,26 +73,30 @@ const store = new Vuex.Store({
                 context.commit("addProject", project);
             }, 1500);
         },
-        async editProjectName(context, { name, id }) {
-            await fetch(`http://localhost:3000/project/${id}`, {
-            method: "put",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: localStorage.getItem("token"),
-            },
-            body: JSON.stringify({
-              name: name,
-            }),
-          });
+        async editProjectName(_, { name, id }) {
+            const response = await fetch(`http://localhost:3000/project/${id}`, {
+                method: "put",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: localStorage.getItem("token"),
+                },
+                body: JSON.stringify({
+                    name: name,
+                }),
+            });
+            if (response.status == 401 || response.status == 400) return endSession(router);
         },
         async deleteProject(context, projectId) {
-            await fetch(`http://localhost:3000/project/${projectId}`, {
+            const response = await fetch(`http://localhost:3000/project/${projectId}`, {
                 method: "delete",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: localStorage.getItem("token"),
                 },
             });
+
+            if (response.status == 401 || response.status == 400) return endSession(router);
+
             context.commit('removeProject', projectId);
         },
         async createTask(context, { taskName, projectId }) {
@@ -100,11 +110,14 @@ const store = new Vuex.Store({
                     name: taskName,
                 }),
             });
+
+            if (response.status == 401 || response.status == 400) return endSession(router);
+
             const task = await response.json();
             context.commit("addTask", { projectId, task });
         },
         async deleteTask(_, { projectId, taskId }) {
-            await fetch(
+            const response = await fetch(
                 `http://localhost:3000/project/${projectId}/task/${taskId}`,
                 {
                     method: "delete",
@@ -114,9 +127,11 @@ const store = new Vuex.Store({
                     },
                 }
             );
+
+            if (response.status == 401 || response.status == 400) return endSession(router);
         },
         async closeTask(_, { projectId, taskId, finished }) {
-            await fetch(
+            const response = await fetch(
                 `http://localhost:3000/project/${projectId}/task/${taskId}`,
                 {
                     method: "put",
@@ -129,9 +144,11 @@ const store = new Vuex.Store({
                     }),
                 }
             );
+
+            if (response.status == 401 || response.status == 400) return endSession(router);
         },
         async editTaskName(_, { projectId, taskId, taskName }) {
-            await fetch(`http://localhost:3000/project/${projectId}/task/${taskId}`, {
+            const response = await fetch(`http://localhost:3000/project/${projectId}/task/${taskId}`, {
                 method: "put",
                 headers: {
                     "Content-Type": "application/json",
@@ -141,6 +158,8 @@ const store = new Vuex.Store({
                     name: taskName,
                 }),
             });
+
+            if (response.status == 401 || response.status == 400) return endSession(router);
         },
         async loadProjects(context) {
             context.commit('loadingProjects', true);
@@ -151,6 +170,9 @@ const store = new Vuex.Store({
                     "Authorization": localStorage.getItem('token'),
                 },
             });
+
+            if (response.status == 401 || response.status == 400) return endSession(router);
+
             const projects = await response.json();
             context.commit('projects', projects);
 
@@ -172,6 +194,9 @@ const store = new Vuex.Store({
                     "Authorization": localStorage.getItem('token'),
                 },
             });
+
+            if (response.status == 401 || response.status == 400) return endSession(router);
+
             const tasks = await response.json();
             context.commit('setTasks', projectId, tasks);
         }

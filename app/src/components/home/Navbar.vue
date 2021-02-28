@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import endSession from '../../services/logout';
 export default {
   data() {
     return {
@@ -25,9 +26,7 @@ export default {
   },
   methods: {
       logout() {
-          localStorage.removeItem('token');
-          localStorage.removeItem('username');
-          this.$router.push('/signin');
+          endSession(this.$router);
       }
   }
 };

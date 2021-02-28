@@ -15,11 +15,6 @@ export default {
         Navbar,
         Content,
     },
-    beforeCreate() {
-        if (!localStorage.getItem('token')) {
-            this.$router.push('/signin');
-        }
-    },
 }
 </script>
 

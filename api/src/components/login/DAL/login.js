@@ -5,7 +5,11 @@ class LoginDAL {
 
     async findUser(username) {
         const user = await this.collection.findOne({ username });
-        return user ? user : [null];
+        if (user) {
+            return [user];
+        } else {
+            return [];
+        }
     }
 }
 

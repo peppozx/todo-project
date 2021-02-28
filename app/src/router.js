@@ -6,6 +6,9 @@ import Home from './components/home/Home.vue';
 
 const routes = [
     {
+        path: '/', redirect: '/signin',
+    },
+    {
         path: '/signin', component: Signin,
     },
     {
