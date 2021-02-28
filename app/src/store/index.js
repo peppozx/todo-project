@@ -38,6 +38,14 @@ const store = new Vuex.Store({
         },
         creatingProject(state, is) {
             state.creatingProject = is;
+        },
+        addTask(state, {projectId, task }) {
+            state.projects = state.projects.map(p => {
+                if (p.id === projectId) {
+                    p.tasks.push(task);
+                }
+                return p;
+            });
         }
     },
     actions: {
@@ -52,11 +60,24 @@ const store = new Vuex.Store({
                 body: JSON.stringify({ name: projectName }),
             });
             const project = await response.json();
+            project.tasks = [];
 
             setTimeout(() => {
                 context.commit('creatingProject', false);
                 context.commit("addProject", project);
             }, 1500);
+        },
+        async editProjectName(context, { name, id }) {
+            await fetch(`http://localhost:3000/project/${id}`, {
+            method: "put",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: localStorage.getItem("token"),
+            },
+            body: JSON.stringify({
+              name: name,
+            }),
+          });
         },
         async deleteProject(context, projectId) {
             await fetch(`http://localhost:3000/project/${projectId}`, {
@@ -69,7 +90,7 @@ const store = new Vuex.Store({
             context.commit('removeProject', projectId);
         },
         async createTask(context, { taskName, projectId }) {
-            await fetch(`http://localhost:3000/project/${projectId}/task`, {
+            const response = await fetch(`http://localhost:3000/project/${projectId}/task`, {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -79,7 +100,47 @@ const store = new Vuex.Store({
                     name: taskName,
                 }),
             });
-            context.dispatch("loadTasks", projectId);
+            const task = await response.json();
+            context.commit("addTask", { projectId, task });
+        },
+        async deleteTask(_, { projectId, taskId }) {
+            await fetch(
+                `http://localhost:3000/project/${projectId}/task/${taskId}`,
+                {
+                    method: "delete",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: localStorage.getItem("token"),
+                    },
+                }
+            );
+        },
+        async closeTask(_, { projectId, taskId, finished }) {
+            await fetch(
+                `http://localhost:3000/project/${projectId}/task/${taskId}`,
+                {
+                    method: "put",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify({
+                        finished,
+                    }),
+                }
+            );
+        },
+        async editTaskName(_, { projectId, taskId, taskName }) {
+            await fetch(`http://localhost:3000/project/${projectId}/task/${taskId}`, {
+                method: "put",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: localStorage.getItem("token"),
+                },
+                body: JSON.stringify({
+                    name: taskName,
+                }),
+            });
         },
         async loadProjects(context) {
             context.commit('loadingProjects', true);

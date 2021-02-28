@@ -102,16 +102,7 @@ export default {
     async editProjectName(e) {
       if (e.keyCode === 13) {
         try {
-          await fetch(`http://localhost:3000/project/${this.project.id}`, {
-            method: "put",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: localStorage.getItem("token"),
-            },
-            body: JSON.stringify({
-              name: this.project.name,
-            }),
-          });
+          await this.$store.dispatch('editProjectName', { name: this.project.name, id: this.project.id });
           this.projectEditMode = false;
         } catch (err) {
           console.log(err);
@@ -119,19 +110,9 @@ export default {
       }
     },
     async editTaskName(taskId, taskName, event) {
-      console.log(event);
       if (event.keyCode === 13) {
         try {
-          await fetch(`http://localhost:3000/project/${this.project.id}/task/${taskId}`, {
-            method: "put",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: localStorage.getItem("token"),
-            },
-            body: JSON.stringify({
-              name: taskName,
-            }),
-          });
+          await this.$store.dispatch('editTaskName', { taskId, taskName, projectId: this.project.id});
           this.editTaskNameMode = false;
           this.editTaskId = '';
         } catch (err) {
@@ -158,20 +139,8 @@ export default {
     },
     async closeTask(id) {
       try {
-        const finished = new Date();
-        await fetch(
-          `http://localhost:3000/project/${this.project.id}/task/${id}`,
-          {
-            method: "put",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: localStorage.getItem("token"),
-            },
-            body: JSON.stringify({
-              finished,
-            }),
-          }
-        );
+        const finished = new Date().toLocaleString();
+        await this.$store.dispatch('closeTask', { projectId: this.project.id, taskId: id, finished });
         const [task] = this.project.tasks.filter((t) => t.id === id);
         task.finished = finished;
       } catch (err) {
@@ -190,16 +159,7 @@ export default {
 
     async deleteTask(id) {
       try {
-        await fetch(
-          `http://localhost:3000/project/${this.project.id}/task/${id}`,
-          {
-            method: "delete",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
+        await this.$store.dispatch('deleteTask', { projectId: this.project.id, taskId: id });
         this.project.tasks = this.project.tasks.filter((t) => t.id != id);
       } catch (err) {
         console.error(err);
@@ -220,7 +180,7 @@ export default {
   display: flex;
   flex-flow: row wrap;
   background-color: snow;
-  height: 300px;
+  height: 400px;
   flex: 0 0 90%;
   margin-top: 30px;
   border-radius: 15px;
@@ -263,6 +223,7 @@ export default {
   height: 60%;
   overflow-y: scroll;
   overflow-x: hidden;
+  padding-top: 35px;
 }
 
 .loading-tasks {
@@ -444,9 +405,9 @@ input:focus {
   border-radius: 6px;
   padding: 5px 0;
   position: absolute;
-  z-index: 999999999999999;
+  z-index: 100;
   bottom: 125%;
-  left: 50%;
+  left: 30%;
   margin-left: -60px;
   opacity: 0;
   font-size: 10px;
@@ -462,13 +423,11 @@ input:focus {
   border-width: 5px;
   border-style: solid;
   border-color: #555 transparent transparent transparent;
-  z-index: 999999999999;
 }
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
-  z-index: 999999999;
 }
 
 @keyframes transitionOpacity {
