@@ -3,10 +3,8 @@ const AppError = require('../../../shared/AppError/AppError');
 const APP_ERROR_TYPE = require('../../../shared/AppError/APP_ERROR_TYPE');
 
 class TaskService {
-    constructor(taskDAL, apiResponse, handleError) {
+    constructor(taskDAL) {
         this.taskDAL = taskDAL;
-        this.apiResponse = apiResponse;
-        this.handleError = handleError;
     }
 
     async createTask(user, projectId, name) {
