@@ -1,6 +1,6 @@
 const TaskService = require('./task');
-const { fakeTaskDAL } = require('../../../db/fake');
+const taskDAL = require('../DAL');
 
-const taskService = new TaskService(fakeTaskDAL);
+const taskService = new TaskService(taskDAL);
 
 module.exports = taskService;

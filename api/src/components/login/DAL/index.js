@@ -1,6 +1,6 @@
 const LoginDAL = require('./login');
-const fakeDb = require('../../../db/fakeDb');
+const db = require('../../../db/mongo/mongo');
 
-const loginDAL = new LoginDAL(fakeDb);
+const loginDAL = new LoginDAL(db.getClient());
 
 module.exports = loginDAL;

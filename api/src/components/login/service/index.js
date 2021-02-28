@@ -1,7 +1,7 @@
 const LoginService = require('./login');
-const { fakeUserDAL } = require('../../../db/fake');
+const loginDAL = require('../DAL')
 const auth = require('../../../auth');
 
-const loginService = new LoginService(fakeUserDAL, auth);
+const loginService = new LoginService(loginDAL, auth);
 
 module.exports = loginService;

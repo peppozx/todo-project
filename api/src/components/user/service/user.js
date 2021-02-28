@@ -15,7 +15,10 @@ class UserService {
             });
         }
         const user = await this.userDAL.createUser({ username, password });
-        return user;
+        return {
+            username: user.username,
+            id: user._id,
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 const ProjectService = require('./project');
-const { fakeProjectDAL } = require('../../../db/fake');
+const projectDAL = require('../DAL');
 
-const projectService = new ProjectService(fakeProjectDAL);
+const projectService = new ProjectService(projectDAL);
 
 module.exports = projectService;

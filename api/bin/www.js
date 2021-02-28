@@ -1,14 +1,17 @@
-const { app } = require('../app');
+const { start } = require('../app');
 const http = require('http');
 
-const port = process.env.PORT || '3000';
-app.set('port', port);
+(async () => {
+    const app = await start();
+    const port = process.env.PORT || '3000';
+    app.set('port', port);
 
-const server = http.createServer(app);
-server.listen(port);
+    const server = http.createServer(app);
+    server.listen(port);
 
-server.on('listening', _ => {
-    console.log('Listening on ' + port);
-});
+    server.on('listening', _ => {
+        console.log('Listening on ' + port);
+    });
+})();
 
 

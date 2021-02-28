@@ -111,6 +111,9 @@ export default {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+  box-shadow: 0px 10px 30px -10px #8ebf42;
+  border-width: 0px;
+  border-radius: 30px;
 }
 
 .login-page-form-title {

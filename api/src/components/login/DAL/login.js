@@ -1,11 +1,11 @@
 class LoginDAL {
     constructor(db) {
-        this.db = db;
+        this.collection = db.collection('user');
     }
 
     async findUser(username) {
-        const [user] = await this.db.findUser(username);
-        return user;
+        const user = await this.collection.findOne({ username });
+        return [user];
     }
 }
 

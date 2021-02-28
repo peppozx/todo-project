@@ -1,32 +1,41 @@
-const ProjectService = require("../service/project");
-
 class ProjectDAL {
     constructor(db) {
-        this.db = db;
+        this.projectCollection = db.collection('project');
+        this.taskCollection = db.collection('task');
     }
 
     async createProject(projectDTO) {
-        const project = await this.db.createProject(projectDTO);
-        return project;
+        const { ops } = await this.projectCollection.insertOne(projectDTO);
+        return ops[0];
     }
 
     async deleteProject(id) {
-        const deletedProject = await this.db.deleteProject(id);
-        return deletedProject;
-    }
-
-    async updateProject(id, name) {
-        const updatedProject = await this.db.updateProject(id, name);
-        return updatedProject;
-    }
-
-    async getProjects() {
-        return await this.db.getProjects();
+        await this.projectCollection.deleteOne({ id });
+        return id;
     }
 
     async getProject(id) {
-        const project = await this.db.getProject(id);
+        const project = await this.projectCollection.find({ id }).toArray();
         return project;
+    }
+
+    async updateProject(id, name) {
+        const { value: projectUpdated } = await this.projectCollection.findOneAndUpdate({ id }, {
+            $set: {
+                name,
+            }
+        }, { returnOriginal: false });
+        return projectUpdated;
+    }
+
+    async getProjects() {
+        const projects = await this.projectCollection.find({}).toArray();
+        return projects;
+    }
+
+    async getTasks(projectId) {
+        const tasks = this.taskCollection.find({ projectId }).toArray();
+        return tasks;
     }
 }
 

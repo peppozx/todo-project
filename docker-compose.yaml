@@ -10,6 +10,8 @@ services:
       - 3000:3000
       - 9229:9229
     command: npm run start:dev
+    depends_on:
+      - todo-db
   todo-frontend:
     build: ./todo-frontend
     volumes:
@@ -18,6 +20,15 @@ services:
     ports:
       - 8080:8080
     command: npm run start
+    logging:
+      driver: none
+  todo-db:
+    image: 'mongo'
+    container_name: todo-mongo
+    ports:
+      - '27017:27017'
+    logging:
+      driver: none
 
 
       

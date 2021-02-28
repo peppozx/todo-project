@@ -10,7 +10,7 @@ class TaskService {
     }
 
     async createTask(user, projectId, name) {
-        const project = await this.taskDAL.getProject(projectId);
+        const [project] = await this.taskDAL.getProject(projectId);
         
         if (!project) {
             throw new AppError({
@@ -39,7 +39,7 @@ class TaskService {
     }
 
     async deleteTask(user, projectId, id) {
-        const project = await this.taskDAL.getProject(projectId);
+        const [project] = await this.taskDAL.getProject(projectId);
         
         if (!project) {
             throw new AppError({
@@ -55,7 +55,7 @@ class TaskService {
             });
         }
 
-        const task = await this.taskDAL.getTask(id);
+        const [task] = await this.taskDAL.getTask(id);
         if (!task) {
             throw new AppError({
                 type: APP_ERROR_TYPE.NOT_FOUND,
@@ -69,7 +69,7 @@ class TaskService {
     }
 
     async updateTask(user, projectId, id, taskInfo) {
-        const project = await this.taskDAL.getProject(projectId);
+        const [project] = await this.taskDAL.getProject(projectId);
         
         if (!project) {
             throw new AppError({
@@ -85,7 +85,7 @@ class TaskService {
             });
         }
 
-        const task = await this.taskDAL.getTask(id);
+        const [task] = await this.taskDAL.getTask(id);
         if (!task) {
             throw new AppError({
                 type: APP_ERROR_TYPE.NOT_FOUND,
@@ -98,7 +98,7 @@ class TaskService {
     }
 
     async getTasks(user, projectId) {
-        const project = await this.taskDAL.getProject(projectId);
+        const [project] = await this.taskDAL.getProject(projectId);
         
         if (!project) {
             throw new AppError({
@@ -120,7 +120,7 @@ class TaskService {
     }
 
     async getTask(user, projectId, id) {
-        const project = await this.taskDAL.getProject(projectId);
+        const [project] = await this.taskDAL.getProject(projectId);
         
         if (!project) {
             throw new AppError({
@@ -136,7 +136,7 @@ class TaskService {
             });
         }
 
-        const task = await this.taskDAL.getTask(id);
+        const [task] = await this.taskDAL.getTask(id);
         return task;
     }
 }

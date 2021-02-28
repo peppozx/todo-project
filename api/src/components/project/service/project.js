@@ -18,7 +18,8 @@ class ProjectService {
     }
 
     async deleteProject(user, id) {
-        const project = await this.projectDAL.getProject(id);
+        const [project] = await this.projectDAL.getProject(id);
+
         if (!project) {
             throw new AppError({
                 type: APP_ERROR_TYPE.NOT_FOUND,
@@ -33,12 +34,12 @@ class ProjectService {
             });
         }
 
-        const deletedProject = await this.projectDAL.deleteProject(id);
-        return deletedProject;
+        const deletedProjectId = await this.projectDAL.deleteProject(id);
+        return { id: deletedProjectId };
     }
 
     async updateProject(user, id, name) {
-        const project = await this.projectDAL.getProject(id);
+        const [project] = await this.projectDAL.getProject(id);
 
         if (!project) {
             throw new AppError({
@@ -70,7 +71,7 @@ class ProjectService {
     }
 
     async getProject(user, id) {
-        const project = await this.projectDAL.getProject(id);
+        const [project] = await this.projectDAL.getProject(id);
 
         if (!project) {
             throw new AppError({
