@@ -7,9 +7,9 @@ const { fakeUserDAL } = require('../../../db/fake');
 let loginService;
 
 if (process.env.NODE_ENV === 'prod') {
-    loginService = new LoginService(loginDAL);
+    loginService = new LoginService(loginDAL, auth);
 } else {
-    loginService = new LoginService(fakeUserDAL);
+    loginService = new LoginService(fakeUserDAL, auth);
 }
 
 module.exports = loginService;

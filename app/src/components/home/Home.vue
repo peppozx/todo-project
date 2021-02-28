@@ -7,7 +7,7 @@
 
 <script>
 import Navbar from './Navbar';
-import Content from './content/Content';
+import Content from './Content';
 
 export default {
     name: 'Home',
@@ -20,9 +20,6 @@ export default {
             this.$router.push('/signin');
         }
     },
-    created() {
-        this.$store.dispatch('loadProjects');
-    }
 }
 </script>
 

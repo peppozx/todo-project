@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import CreateProject from './CreateProject';
-import ProjectsWrapper from './ProjectsWrapper';
+import CreateProject from './project/CreateProject';
+import ProjectsWrapper from './project/ProjectsWrapper';
 
 export default {
     name: 'Content',

@@ -15,7 +15,7 @@ class FakeUserDAL {
     }
 
     async findUser(username) {
-        const [user] = this.db.users.filter(u => u.username === username);
+        const user = this.db.users.filter(u => u.username === username);
         return user;
     }
 

@@ -1,55 +1,66 @@
 <template>
   <div class="card">
     <div class="project-header">
-      <div class="name">
-        <input
-          ref="projectNameInput.focus();"
-          @keypress="editProjectName"
-          :disabled="!projectEditMode"
-          v-model="project.name"
-          :class="{ 'edit-mode': projectEditMode }"
-        />
-      </div>
-      <div class="edit">
-        <i
-          @click="activateEditMode"
-          class="edit fa fa-edit"
-          style="font-size: 18px"
-        ></i>
-        <i class="delete fa fa-trash" style="font-size: 18px" @click="deleteProject"></i>
+      <div class="header-wrapper">
+        <div class="name">
+          <input
+            ref="projectNameInput.focus();"
+            @keypress="editProjectName"
+            :disabled="!projectEditMode"
+            v-model="project.name"
+            :class="{ 'edit-mode': projectEditMode }"
+          />
+        </div>
+        <div class="edit">
+          <i
+            @click="activateEditMode"
+            class="edit fa fa-edit"
+            style="font-size: 18px;"
+          ></i>
+          <i
+            class="delete fa fa-trash"
+            style="font-size: 18px;"
+            @click="deleteProject"
+          ></i>
+        </div>
       </div>
     </div>
-    <div class="project-tasks">
+    <div class="project-tasks" v-if="!loadingTasks">
       <div class="tasks" v-for="task of this.project.tasks" :key="task.id">
         <div class="todo">
-          <input
-            :disabled="task.finished"
-            type="checkbox"
-            @click="closeTask(task.id)"
-          />
           <div class="tooltip" :class="{ 'task-finished': task.finished }">
+            <input
+              :disabled="task.finished"
+              type="checkbox"
+              @click="closeTask(task.id)"
+            />
             <span>{{ task.name }}</span>
-            <span v-if="task.finished" class="tooltiptext">Finished {{ task.finished }}</span>
+            <span v-if="task.finished" class="tooltiptext"
+              >Finished {{ task.finished }}</span
+            >
           </div>
           <br />
           <div class="edit-mode">
             <i
               v-if="!task.finished"
               class="edit fa fa-edit"
-              style="font-size: 18px"
+              style="font-size: 18px; color: green"
               @click="editTask(task.id)"
             ></i>
             <i
               v-if="!task.finished"
               class="delete fa fa-trash"
-              style="font-size: 18px"
+              style="font-size: 18px; color: #f0554a"
               @click="deleteTask(task.id)"
             ></i>
           </div>
         </div>
       </div>
     </div>
-    <hr style="width: 90%" />
+    <div class="loading-tasks" v-else>
+      <PulseLoader />
+    </div>
+    <hr v-if="!loadingTasks" hr style="width: 90%" />
     <div class="create-task">
       <input v-model="taskName" placeholder="Task name" />
       <button :disabled="!taskName" @click="createTask">Add</button>
@@ -58,6 +69,8 @@
 </template>
 
 <script>
+import PulseLoader from "vue-spinner/src/PulseLoader";
+
 export default {
   name: "ProjectCard",
   props: ["project"],
@@ -66,6 +79,14 @@ export default {
       taskName: "",
       projectEditMode: false,
     };
+  },
+  components: {
+    PulseLoader,
+  },
+  computed: {
+    loadingTasks() {
+      return this.$store.state.loadingTasks;
+    },
   },
   methods: {
     async editProjectName(e) {
@@ -89,31 +110,14 @@ export default {
     },
     async deleteProject() {
       try {
-        await fetch(`http://localhost:3000/project/${this.project.id}`, {
-          method: "delete",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("token"),
-          },
-        });
-        this.$store.dispatch("loadProjects");
+        await this.$store.dispatch('deleteProject', this.project.id);
       } catch (err) {
         console.log(err);
       }
     },
     async createTask() {
       try {
-        await fetch(`http://localhost:3000/project/${this.project.id}/task`, {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("token"),
-          },
-          body: JSON.stringify({
-            name: this.taskName,
-          }),
-        });
-        this.$store.dispatch("loadProjects");
+        await this.$store.dispatch('createTask', this.taskName, this.project.id);
       } catch (err) {
         console.log(err);
       }
@@ -185,15 +189,13 @@ export default {
   flex: 0 0 90%;
   margin-top: 30px;
   border-radius: 15px;
-  transition: 0.7s;
-  animation: transitionOpacity 0.7s;
+  transition: 0.4s;
+  animation: transitionOpacity 0.4s;
   max-width: 300px;
 }
 .project-header {
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   flex: 0 0 100%;
   display: flex;
   flex-flow: row wrap;
@@ -201,6 +203,21 @@ export default {
   background-color: #8ebf42;
   color: #fff;
   font-weight: 500;
+    padding: 15px 0px 10px 0px;
+}
+
+.header-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  flex: 0 0 100%;
+}
+
+.header-wrapper .name {
+  flex: 0 0 78%;
+}
+
+.header-wrapper .edit {
+  flex: 0 0 18%
 }
 
 .project-tasks {
@@ -211,6 +228,15 @@ export default {
   height: 60%;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.loading-tasks {
+  display: flex;
+  flex-flow: row wrap;
+  flex: 0 0 100%;
+  justify-content: center;
+  align-items: center;
+  height: 60%;
 }
 
 .tasks {
@@ -351,7 +377,8 @@ input:focus {
 .tooltip {
   flex: 0 0 60%;
   position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
   font-size: 13px;
 }
 
@@ -382,13 +409,13 @@ input:focus {
   border-width: 5px;
   border-style: solid;
   border-color: #555 transparent transparent transparent;
-  z-index: 999999999999
+  z-index: 999999999999;
 }
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
-  z-index: 999999999
+  z-index: 999999999;
 }
 
 @keyframes transitionOpacity {
@@ -399,6 +426,4 @@ input:focus {
     opacity: 1;
   }
 }
-
-
 </style>

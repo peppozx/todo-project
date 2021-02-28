@@ -10,13 +10,13 @@
           <div class="container">
             <input
               type="text"
-              placeholder="Enter Project Name"
+              placeholder="Project name"
               name="uname"
               required
-              v-model="name"
+              v-model="projectName"
             />
           </div>
-          <button v-if="!loading" :disabled="!name" @click="createProject">
+          <button v-if="!loading" :disabled="!projectName" @click="createProject">
             Create Project
           </button>
           <div v-else class="loading">
@@ -35,30 +35,22 @@ export default {
   name: "CreateProject",
   data() {
     return {
-      name: "",
-      loading: false,
+      projectName: "",
     };
   },
   components: {
     PulseLoader,
   },
+  computed: {
+    loading() {
+      return this.$store.state.creatingProject;
+    }
+  },
   methods: {
     async createProject() {
       try {
-        this.loading = true;
-        await fetch("http://localhost:3000/project", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("token"),
-          },
-          body: JSON.stringify({ name: this.name }),
-        });
-        setTimeout(async () => {
-          this.loading = false;
-          this.name = '';
-          this.$store.dispatch("loadProjects");
-        }, 1500);
+        this.$store.dispatch('createProject', this.projectName);
+        this.projectName = '';
       } catch (err) {
         console.log(err);
       }
