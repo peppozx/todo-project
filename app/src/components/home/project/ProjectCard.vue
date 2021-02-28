@@ -16,7 +16,7 @@
           class="edit fa fa-edit"
           style="font-size: 18px"
         ></i>
-        <i class="delete fa fa-trash" @click="deleteProject"></i>
+        <i class="delete fa fa-trash" style="font-size: 18px" @click="deleteProject"></i>
       </div>
     </div>
     <div class="project-tasks">
@@ -42,6 +42,7 @@
             <i
               v-if="!task.finished"
               class="delete fa fa-trash"
+              style="font-size: 18px"
               @click="deleteTask(task.id)"
             ></i>
           </div>
@@ -186,6 +187,7 @@ export default {
   border-radius: 15px;
   transition: 0.7s;
   animation: transitionOpacity 0.7s;
+  max-width: 300px;
 }
 .project-header {
   border-top-right-radius: 15px;
@@ -255,6 +257,7 @@ export default {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
+  align-items: center;
 }
 
 .todo .delete {
@@ -396,4 +399,6 @@ input:focus {
     opacity: 1;
   }
 }
+
+
 </style>
