@@ -15,11 +15,11 @@
           <i
             @click="activateEditMode"
             class="edit fa fa-edit"
-            style="font-size: 18px;"
+            style="font-size: 18px"
           ></i>
           <i
             class="delete fa fa-trash"
-            style="font-size: 18px;"
+            style="font-size: 18px"
             @click="deleteProject"
           ></i>
         </div>
@@ -34,7 +34,15 @@
               type="checkbox"
               @click="closeTask(task.id)"
             />
-            <span>{{ task.name }}</span>
+            <input
+              :class="{
+                'task-name-edit': true,
+                'task-name-edit-activate': editTaskNameMode && editTaskId === task.id,
+              }"
+              @keypress="editTaskName(task.id, task.name, $event)"
+              :disabled="!editTaskNameMode"
+              v-model="task.name"
+            />
             <span v-if="task.finished" class="tooltiptext"
               >Finished {{ task.finished }}</span
             >
@@ -63,7 +71,7 @@
     <hr v-if="!loadingTasks" hr style="width: 90%" />
     <div class="create-task">
       <input v-model="taskName" placeholder="Task name" />
-      <button :disabled="!taskName" @click="createTask">Add</button>
+      <button :disabled="!taskName" @click="createTask">+</button>
     </div>
   </div>
 </template>
@@ -78,6 +86,8 @@ export default {
     return {
       taskName: "",
       projectEditMode: false,
+      editTaskNameMode: false,
+      editTaskId: '',
     };
   },
   components: {
@@ -108,16 +118,40 @@ export default {
         }
       }
     },
+    async editTaskName(taskId, taskName, event) {
+      console.log(event);
+      if (event.keyCode === 13) {
+        try {
+          await fetch(`http://localhost:3000/project/${this.project.id}/task/${taskId}`, {
+            method: "put",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: localStorage.getItem("token"),
+            },
+            body: JSON.stringify({
+              name: taskName,
+            }),
+          });
+          this.editTaskNameMode = false;
+          this.editTaskId = '';
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
     async deleteProject() {
       try {
-        await this.$store.dispatch('deleteProject', this.project.id);
+        await this.$store.dispatch("deleteProject", this.project.id);
       } catch (err) {
         console.log(err);
       }
     },
     async createTask() {
       try {
-        await this.$store.dispatch('createTask', this.taskName, this.project.id);
+        await this.$store.dispatch("createTask", {
+          taskName: this.taskName,
+          projectId: this.project.id,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -147,7 +181,8 @@ export default {
 
     async editTask(id) {
       try {
-        console.log("edit mode on" + id);
+        this.editTaskNameMode = !this.editTaskNameMode;
+        this.editTaskId = id;
       } catch (err) {
         console.error(err);
       }
@@ -203,7 +238,7 @@ export default {
   background-color: #8ebf42;
   color: #fff;
   font-weight: 500;
-    padding: 15px 0px 10px 0px;
+  padding: 15px 0px 10px 0px;
 }
 
 .header-wrapper {
@@ -217,7 +252,7 @@ export default {
 }
 
 .header-wrapper .edit {
-  flex: 0 0 18%
+  flex: 0 0 18%;
 }
 
 .project-tasks {
@@ -258,6 +293,8 @@ export default {
   flex-flow: row wrap;
   align-items: center;
   justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
   transition: 0.6s;
   animation: transitionOpacity 1s;
 }
@@ -275,6 +312,22 @@ export default {
   flex: 0 0 10%;
   cursor: pointer;
   margin-top: 3px;
+}
+
+.task-name-edit {
+  background-color: transparent;
+}
+
+.task-name-edit {
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-left-width: 0px;
+  border-bottom-width: 0px;
+  color: black;
+}
+
+.task-name-edit-activate {
+  border-bottom-width: 1px;
 }
 
 .edit {

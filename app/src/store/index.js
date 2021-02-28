@@ -68,7 +68,7 @@ const store = new Vuex.Store({
             });
             context.commit('removeProject', projectId);
         },
-        async createTask(context, taskName, projectId) {
+        async createTask(context, { taskName, projectId }) {
             await fetch(`http://localhost:3000/project/${projectId}/task`, {
                 method: "post",
                 headers: {

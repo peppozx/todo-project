@@ -9,7 +9,7 @@ class LoginService {
     
     async signIn({ username, password }) {
         const [user] = await this.loginDAL.findUser(username);
-
+        
         if (!user) {
             throw new AppError({
                 type: APP_ERROR_TYPE.NOT_FOUND,

@@ -19,7 +19,7 @@ class FakeProjectDAL {
     }
 
     async updateProject(id, name) {
-        const project = await this.getProject(id);
+        const [project] = this.db.projects.filter(p => p.id === id);
         project.name = name;
         return project;
     }
