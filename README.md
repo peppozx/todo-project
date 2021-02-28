@@ -18,7 +18,9 @@
 
 ### Prerequisites
 
+* docker
 * docker-compose
+* nodejs
 
 ### Installation
 
