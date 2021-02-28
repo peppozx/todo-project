@@ -12,6 +12,9 @@ services:
     command: npm run start:dev
     depends_on:
       - todo-db
+    networks:
+      - net-todo-app
+    hostname: todo-api
   todo-frontend:
     build: ./todo-frontend
     volumes:
@@ -22,6 +25,9 @@ services:
     command: npm run start
     logging:
       driver: none
+    networks:
+      - net-todo-app
+    hostname: todo-front
   todo-db:
     image: 'mongo'
     container_name: todo-mongo
@@ -29,6 +35,11 @@ services:
       - '27017:27017'
     logging:
       driver: none
+    networks:
+      - net-todo-app
+
+networks:
+  net-todo-app:
 
 
       
