@@ -33,7 +33,13 @@
    docker-compose up
    ```
 
+### Tests
 
+1. Enter /api folder
+    ```sh
+    npm run test
+    ```
+    
 
 <!-- CONTACT -->
 ## Contact
